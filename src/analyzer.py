@@ -7,15 +7,15 @@ def fetch_data(tickers, start="2020-01-01", end=None):
     data = yf.download(tickers, start=start, end=end, auto_adjust=True)
     return data["Close"]
 
-#Ticker Lookup
+# Ticker Lookup
 tickers_input = input("Enter ticker symbols (comma‑separated), e.g. AAPL,MSFT,GOOG: ")
 tickers = [t.strip().upper() for t in tickers_input.split(",")]
 
-#Fetch data for the user’s tickers
+# Fetch data for the user’s tickers
 adj_close = fetch_data(tickers)
 adj_close.to_csv("data/adj_close.csv")
 
-#Core metrics
+# Core metrics
 daily_returns      = adj_close.pct_change().dropna()
 cumulative_returns = (1 + daily_returns).cumprod()
 volatility         = daily_returns.std() * np.sqrt(252)
@@ -34,7 +34,7 @@ for ticker in tickers:
     forecast = slope * (len(prices) + horizon) + intercept
     print(f"\nNaïve {horizon}‑day forecast for {ticker}: ${forecast:,.2f}")
 
-    #Plot last 60 days + forecast point
+    # Plot last 60 days + forecast point
     recent = adj_close[ticker].tail(60)
     plt.figure(figsize=(8,4))
     plt.plot(recent.index, recent.values, label=f"{ticker} Price")
@@ -57,30 +57,26 @@ print(volatility)
 print("\nCorrelation matrix:")
 print(correlation)
 
-#Portfolio Allocation Recommendation
-
-#Ask user for a total portfolio size
+# Portfolio Allocation Recommendation
 portfolio_value = float(input("\nEnter total portfolio value in USD (e.g. 10000): "))
 
-#Calculate inverse‑volatility weights
+# Calculate inverse‑volatility weights
 inv_vol = 1 / volatility
 weights_iv = inv_vol / inv_vol.sum()
 
-#Calculate dollar allocations
+# Calculate dollar allocations
 allocations = weights_iv * portfolio_value
 
 print("\nRecommended allocation (inverse-volatility weighting):")
 for ticker, w in weights_iv.items():
     print(f"  {ticker}: {w:.2%} → ${allocations[ticker]:,.2f}")
 
-#Value at Risk (VaR)
-
+#Value at Risk (VaR)x
 var_position = float(input("\nEnter position size for VaR calculation in USD (e.g. 1000): "))
 
 print("\nOne-day 95% Historical VaR:")
 for ticker in tickers:
     losses = -daily_returns[ticker]
-    #95th percentile of losses
     var95 = np.percentile(losses, 95) * var_position
     print(f"  {ticker}: ${var95:,.2f} ({var95/var_position:.2%} of position)")
 

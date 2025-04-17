@@ -4,8 +4,6 @@ import yfinance as yf
 
 def fetch_data(ticker, start, end):
     df = yf.download(ticker, start=start, end=end, auto_adjust=True)
-    # df["Close"] will be a Series if ticker is a string
-    # but if df["Close"] is a DataFrame (multi-index), take the first column
     close = df["Close"]
     if isinstance(close, pd.DataFrame):
         close = close.iloc[:, 0]
@@ -17,7 +15,6 @@ def linear_forecast(prices: pd.Series, forecast_date: pd.Timestamp) -> float:
 
     y = prices.values
     x = np.arange(len(y))
-    # Fit y = m * x + b
     m, b = np.polyfit(x, y, 1)
     delta_days = (forecast_date - prices.index[-1]).days
     X = len(prices) + delta_days
@@ -40,7 +37,6 @@ def main():
     if forecast_date in prices_full.index:
         actual = prices_full.loc[forecast_date]
     else:
-        # use last available trading day before forecast_date
         actual = prices_full[:forecast_date].iloc[-1]
 
     # Error metrics
