@@ -1,16 +1,16 @@
 # Stock Portfolio Analyzer & Backtester
 
 ## Description  
-A command‑line tool for fetching and analyzing historical stock data. Users can enter one or more ticker symbols to compute key metrics, visualize price behavior, forecast future prices with a simple linear trend, allocate portfolio weights by inverse volatility, calculate one‑day 95% historical Value at Risk (VaR), and backtest forecast accuracy over an out‑of‑sample period.
+A command-line tool for fetching and analyzing historical stock data. Users can enter one or more ticker symbols to compute key metrics, visualize price behavior, forecast future prices with a simple linear trend, allocate portfolio weights by inverse volatility, and backtest forecast accuracy over a fixed out-of-sample period.
+
 
 ## Features  
 - Fetch adjusted closing prices using yfinance  
-- Calculate daily returns, cumulative returns, annualized volatility, correlations, Sharpe ratios, and max drawdown  
-- Plot recent price history, volatility bar charts, and correlation heatmaps  
-- Provide a naïve linear‑trend forecast for a user‑specified horizon  
-- Recommend portfolio allocations based on inverse‑volatility weighting  
-- Compute one‑day 95% historical VaR for a given position size  
-- Backtest the naïve forecast against data from January 1, 2025 to April 1, 2025 and report prediction error  
+- Calculate daily returns, cumulative returns, annualized volatility, and correlation matrix  
+- Provide a naïve linear-trend forecast for a user-specified number of trading days  
+- Plot recent price history and forecast point for each stock  
+- Recommend portfolio allocations using inverse-volatility weighting  
+- Backtest a single-stock forecast based on historical training and evaluation windows 
 
 ## Installation  
 1. Clone the repository  
